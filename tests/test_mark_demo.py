@@ -30,6 +30,8 @@ def test_critical():
 def test_critical_and_regression():
     assert 1 == 2
 
+def test_critical_and_regression1():
+ assert 1 == 1
 
 
     # smoke
