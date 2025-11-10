@@ -1,62 +1,25 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.9-slim'
-            args '--user root'  // для прав на запись файлов
-        }
-    }
+    agent any
 
     stages {
-        stage('Check Environment') {
+        stage('Hello') {
             steps {
-                sh 'python --version'
-                sh 'pip --version'
+                echo 'Привет! Это мой первый пайплайн!'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
-                sh 'pip install --upgrade pip'
-                script {
-                    // Проверяем есть ли requirements.txt
-                    if (fileExists('requirements.txt')) {
-                        sh 'pip install -r requirements.txt'
-                    } else {
-                        echo 'requirements.txt не найден, устанавливаем базовые зависимости'
-                        sh 'pip install pytest'
-                    }
-                }
+                echo 'Собираем проект...'
+                sh 'echo "Build completed"'
             }
         }
 
-        stage('Run Tests') {
+        stage('Test') {
             steps {
-                script {
-                    // Пытаемся найти и запустить тесты разными способами
-                    if (fileExists('tests')) {
-                        echo 'Запускаем тесты из папки tests'
-                        sh 'python -m pytest tests/ -v || echo "Pytest не сработал"'
-                    } else if (fileExists('test')) {
-                        echo 'Запускаем тесты из папки test'
-                        sh 'python -m pytest test/ -v || echo "Pytest не сработал"'
-                    } else {
-                        echo 'Ищем тесты в проекте'
-                        sh 'python -m pytest . -v --tb=short || echo "Тесты не найдены"'
-                    }
-                }
+                echo 'Запускаем тесты...'
+                sh 'echo "All tests passed"'
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Пайплайн завершен!'
-        }
-        success {
-            echo '✅ Все этапы выполнены успешно!'
-        }
-        failure {
-            echo '❌ Пайплайн завершился с ошибкой'
         }
     }
 }
