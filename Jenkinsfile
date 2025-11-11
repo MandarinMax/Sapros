@@ -8,13 +8,9 @@ pipeline {
         }
         stage('Unit Test') {
             steps {
-                script {
-                    sh 'pip install -r requirements.txt'  // Установить зависимости проекта
-                    sh 'pytest'  // Запустить тесты
-                }
+                sh 'pip install -r requirements.txt'
+                sh 'pytest'
             }
         }
-        // Дополнительные этапы для сборки, деплоя и т. д.
     }
-
-
+}
