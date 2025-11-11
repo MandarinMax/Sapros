@@ -43,5 +43,3 @@ pipeline {
             echo 'Tests failed!'
         }
     }
-}
-}
