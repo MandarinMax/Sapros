@@ -4,15 +4,14 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'python -m venv venv'
-                sh '. venv/bin/activate && pip install -r requirements.txt'
-                sh '. venv/bin/activate && pip install pytest pytest-html'
+                sh 'pip install -r requirements.txt'
+                sh 'pip install pytest pytest-html'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh '. venv/bin/activate && pytest --html=report.html --self-contained-html'
+                sh 'pytest --html=report.html --self-contained-html'
             }
             post {
                 always {
@@ -32,6 +31,12 @@ pipeline {
     post {
         always {
             echo 'Pipeline completed'
+        }
+        success {
+            echo 'All tests passed!'
+        }
+        failure {
+            echo 'Tests failed!'
         }
     }
 }
