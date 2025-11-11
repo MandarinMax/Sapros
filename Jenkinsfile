@@ -2,41 +2,23 @@ pipeline {
     agent any
 
     stages {
-        stage('Install Dependencies') {
+        stage('Test') {
             steps {
-                sh 'pip install -r requirements.txt'
-                sh 'pip install pytest pytest-html'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
+                sh 'pip install -r requirements.txt pytest pytest-html'
                 sh 'pytest --html=report.html --self-contained-html'
             }
             post {
                 always {
                     publishHTML([
-                        allowMissing: false,
+                        allowMissing: true,
                         alwaysLinkToLastBuild: true,
                         keepAll: true,
                         reportDir: '.',
                         reportFiles: 'report.html',
-                        reportName: 'Pytest Report'
+                        reportName: 'Test Results'
                     ])
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline completed'
-        }
-        success {
-            echo 'All tests passed!'
-        }
-        failure {
-            echo 'Tests failed!'
         }
     }
 }
