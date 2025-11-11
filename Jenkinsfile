@@ -1,15 +1,46 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3.9'
+            args '-u root'
+        }
+    }
 
-    stages {
-        stage('Unit Test') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    // Используем python3 -m pip вместо pip
-                    sh 'python3 -m pip install -r requirements.txt'
-                    sh 'python3 -m pytest'
+                sh 'pip install -r requirements.txt'
+                sh 'pip install pytest pytest-html'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'pytest --html=report.html --self-contained-html'
+            }
+            post {
+                always {
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: '.',
+                        reportFiles: 'report.html',
+                        reportName: 'Pytest Report'
+                    ])
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+        success {
+            echo 'All tests passed!'
+        }
+        failure {
+            echo 'Tests failed!'
         }
     }
 }
