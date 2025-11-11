@@ -1,15 +1,14 @@
 pipeline {
     agent any
+
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
         stage('Unit Test') {
             steps {
-                sh 'pip install -r requirements.txt'
-                sh 'pytest'
+                script {
+                    // Используем python3 -m pip вместо pip
+                    sh 'python3 -m pip install -r requirements.txt'
+                    sh 'python3 -m pytest'
+                }
             }
         }
     }
