@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     stages {
-        stage('Check Python') {
+        stage('Install Python Venv') {
             steps {
-                sh 'python3 --version'
+                sh 'apt-get update && apt-get install -y python3-venv'
             }
         }
 
@@ -19,18 +19,6 @@ pipeline {
             steps {
                 sh '. venv/bin/activate && pytest'
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline execution completed'
-        }
-        success {
-            echo 'All tests passed! ✅'
-        }
-        failure {
-            echo 'Some tests failed! ❌'
         }
     }
 }
