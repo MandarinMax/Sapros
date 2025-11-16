@@ -1,9 +1,15 @@
 pipeline {
     agent any
+
     stages {
         stage('Test') {
             steps {
-                sh 'pip3 install --user pytest && python3 -m pytest'
+                sh '''
+                    python3 -m venv venv --system-site-packages
+                    . venv/bin/activate
+                    pip install pytest
+                    pytest
+                '''
             }
         }
     }
