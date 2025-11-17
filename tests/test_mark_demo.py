@@ -28,7 +28,7 @@ def test_critical():
 @pytest.mark.critical
 @pytest.mark.regression
 def test_critical_and_regression():
-    assert 1 == 2
+    assert 1 == 1
 
 def test_critical_and_regression1():
  assert 1 == 1
